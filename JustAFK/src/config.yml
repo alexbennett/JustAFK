@@ -1,0 +1,7 @@
+# Default JustAFK Config
+tagmessages: true
+
+# AFK-related options
+autokick: true
+kicktime: 300
+kickreason: You were inactive for too long!

@@ -6,7 +6,13 @@ commands:
     afk:
         usage: /afk
         permission: justafk.basic
+    justafk:
+        usage: /justafk
+        permission: justafk.basic
 permissions:
-    justafk.basic
+    justafk.basic:
         description: The default permission for players.
         default: true
+    justafk.admin:
+        description: The administrative permission node.
+        default: false
