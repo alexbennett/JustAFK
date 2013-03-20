@@ -65,7 +65,8 @@ public class JCommands implements CommandExecutor
             else if(command.getName().equalsIgnoreCase("justafk"))
             {
                 player.sendMessage(ChatColor.AQUA + "JustAFK" + ChatColor.GRAY + " is a plugin creating for Bukkit intended for the use");
-                player.sendMessage(ChatColor.GRAY + "of simple - yet effective - AFK messages within Minecraft survival multiplayer.");
+                player.sendMessage(ChatColor.GRAY + "of simple - yet effective - AFK messages within Minecraft");
+                player.sendMessage(ChatColor.GRAY + "survival multiplayer.");
                 player.sendMessage("");
                 player.sendMessage(ChatColor.GRAY + "Author: " + ChatColor.AQUA + "_Alex");
                 player.sendMessage(ChatColor.GRAY + "Source: " + ChatColor.AQUA + "http://github.com/alexbennett/Minecraft-JustAFK");

@@ -36,6 +36,7 @@ public class JustAFK extends JavaPlugin
         // Register and load commands
         JCommands executor = new JCommands();
         getCommand("afk").setExecutor(executor);
+        getCommand("justafk").setExecutor(executor);
 
         // Log that JustAFK successfully loaded
         JUtility.log("info", "Enabled!");
