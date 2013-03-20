@@ -1,0 +1,12 @@
+name: JustAFK
+main: net.alexben.JustAFK.JustAFK
+version: 0.1
+author: _Alex
+commands:
+    afk:
+        usage: /afk
+        permission: justafk.basic
+permissions:
+    justafk.basic
+        description: The default permission for players.
+        default: true
