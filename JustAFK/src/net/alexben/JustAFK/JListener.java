@@ -51,7 +51,7 @@ public class JListener implements Listener
             if(JUtility.isAway(player))
             {
                 JUtility.setAway(player, false);
-                player.sendMessage(ChatColor.AQUA + "You are no longer AFK.");
+                JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
             }
         }
     }
@@ -64,7 +64,7 @@ public class JListener implements Listener
         if(JUtility.isAway(player))
         {
             JUtility.setAway(player, false);
-            player.sendMessage(ChatColor.AQUA + "You are no longer AFK.");
+            JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
         }
     }
 }

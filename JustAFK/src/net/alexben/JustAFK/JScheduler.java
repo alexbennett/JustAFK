@@ -19,34 +19,35 @@
 
 package net.alexben.JustAFK;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 
-public class JustAFK extends JavaPlugin
+public class JScheduler
 {
-    @Override
-    public void onEnable()
+    // Define variables
+    private static JustAFK plugin = null;
+
+    public static void initialize(JustAFK instance)
     {
-        // Initialize the config, scheduler, and utilities
-        JConfig.initialize(this);
-        JUtility.initialize(this);
-        JScheduler.initialize(this);
-
-        // Register the listeners
-        getServer().getPluginManager().registerEvents(new JListener(), this);
-
-        // Register and load commands
-        JCommands executor = new JCommands();
-        getCommand("afk").setExecutor(executor);
-        getCommand("justafk").setExecutor(executor);
-        getCommand("whosafk").setExecutor(executor);
-
-        // Log that JustAFK successfully loaded
-        JUtility.log("info", "JustAFK has been successfully enabled!");
+        plugin = instance;
+        startThreads();
     }
 
-    @Override
-    public void onDisable()
+    @SuppressWarnings("deprecation")
+    public static void startThreads()
     {
-        JUtility.log("info", "Disabled!");
+        // Setup threads for checking player movement
+        Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                JUtility.checkMovement();
+            }
+        }, 0, JConfig.getSettingInt("movementcheckfreq") * 20);
+    }
+
+    public static void stopThreads()
+    {
+        Bukkit.getServer().getScheduler().cancelTasks(plugin);
     }
 }

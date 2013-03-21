@@ -33,8 +33,9 @@ public class JUtility
     // Define variables
     private static JustAFK plugin = null;
     private static final Logger log = Logger.getLogger("Minecraft");
-    private static final String pluginName = ChatColor.RED + "JustAFK" + ChatColor.RESET;
-    private static final HashMap<OfflinePlayer, HashMap<String, Object>> save = new HashMap<OfflinePlayer, HashMap<String, Object>>();
+    private static final String pluginName = ChatColor.GREEN + "JustAFK" + ChatColor.RESET;
+    private static final String pluginNameNoColor = "JustAFK";
+    private static final HashMap<String, HashMap<String, Object>> save = new HashMap<String, HashMap<String, Object>>();
 
     public static void initialize(JustAFK instance)
     {
@@ -59,9 +60,9 @@ public class JUtility
      */
     public static void log(String type, String msg)
     {
-        if(type.equalsIgnoreCase("info")) log.info("[" + pluginName + "] " + msg);
-        else if(type.equalsIgnoreCase("warning")) log.warning("[" + pluginName + "] " + msg);
-        else if(type.equalsIgnoreCase("severe")) log.severe("[" + pluginName + "] " + msg);
+        if(type.equalsIgnoreCase("info")) log.info("[" + pluginNameNoColor + "] " + msg);
+        else if(type.equalsIgnoreCase("warning")) log.warning("[" + pluginNameNoColor + "] " + msg);
+        else if(type.equalsIgnoreCase("severe")) log.severe("[" + pluginNameNoColor + "] " + msg);
     }
 
     /**
@@ -80,6 +81,24 @@ public class JUtility
     }
 
     /**
+     * Sends a message to a player prepended with the plugin name.
+     *
+     * @param player the player to message.
+     * @param msg the message to send.
+     */
+    public static void sendMessage(Player player, String msg)
+    {
+        if(JConfig.getSettingBoolean("tagmessages"))
+        {
+            player.sendMessage("[" + pluginName + "] " + msg);
+        }
+        else
+        {
+            player.sendMessage(msg);
+        }
+    }
+
+    /**
      * Sets the <code>player</code>'s away status to <code>boolean</code>.
      *
      * @param player the player to update.
@@ -88,7 +107,7 @@ public class JUtility
     public static void setAway(final Player player, boolean away)
     {
         // Define variables
-        String status = null;
+        String status;
         if(away) status = "has gone";
         else status = "is no longer";
 
@@ -113,20 +132,18 @@ public class JUtility
         // Save their availability
         saveData(player, "isafk", away);
 
-
-
         // Send the server-wide message
-        if(away && save.get(player).containsKey("afkmessage"))
+        if(away && getData(player, "message") != null)
         {
-            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " AFK." + ChatColor.GRAY + " (" + save.get(player).get("afkmessage") + ChatColor.RESET + ")");
+            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " away. (" + ChatColor.ITALIC + getData(player, "message") + ChatColor.RESET + ")");
         }
         else
         {
-            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " AFK.");
+            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " away.");
         }
 
         // If auto-kick is enabled then start the delayed task
-        if(away && JConfig.getSettingBoolean("autokick"))
+        if(away && JConfig.getSettingBoolean("autokick") && !hasPermissionOrOP(player, "justafk.immune"))
         {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
@@ -134,9 +151,14 @@ public class JUtility
                 public void run()
                 {
                     if(!isAway(player)) return;
+
+                    // Remove their data, show them, and then finally kick them
                     removeAllData(player);
                     for(Player onlinePlayer : Bukkit.getOnlinePlayers()) onlinePlayer.showPlayer(player);
                     player.kickPlayer(JConfig.getSettingString("kickreason"));
+
+                    // Log it to the console
+                    log("info", player.getName() + " has been kicked for inactivity.");
                 }
             }, JConfig.getSettingInt("kicktime") * 20);
         }
@@ -150,7 +172,7 @@ public class JUtility
      */
     public static void setAwayMessage(Player player, String msg)
     {
-        saveData(player, "afkmessage", msg);
+        saveData(player, "message", msg);
     }
 
     /**
@@ -180,7 +202,7 @@ public class JUtility
 
         for(Player player : Bukkit.getOnlinePlayers())
         {
-            if(save.containsKey(player) && save.get(player).containsKey("isafk") && save.get(player).get("isafk").equals(true)) players.add(player);
+            if(getData(player, "isafk") != null && getData(player, "isafk").equals(true)) players.add(player);
         }
 
         return players;
@@ -212,6 +234,32 @@ public class JUtility
     }
 
     /**
+     * Checks movement for all online players and marks them as AFK if need-be.
+     */
+    public static void checkMovement()
+    {
+        // Get all online players
+        for(Player player : Bukkit.getOnlinePlayers())
+        {
+            // Make sure they aren't already away
+            if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
+            {
+                // Check their movement
+                if(getData(player, "position") != null && getData(player, "position").equals(player.getLocation()))
+                {
+                    // They player is AFK, set their status
+                    setAway(player, true);
+
+                    // Message them
+                    player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been automatically set to away.");
+                }
+
+                saveData(player, "position", player.getLocation());
+            }
+        }
+    }
+
+    /**
      * Saves <code>data</code> under the key <code>name</code> to <code>player</code>.
      *
      * @param player the player to save data to.
@@ -221,13 +269,28 @@ public class JUtility
     public static void saveData(OfflinePlayer player, String name, Object data)
     {
         // Create new save for the player if one doesn't already exist
-        if(!save.containsKey(player))
+        if(!save.containsKey("jafk_" + player.getName()))
         {
-            save.put(player, new HashMap<String, Object>());
+            save.put("jafk_" + player.getName(), new HashMap<String, Object>());
         }
 
-        // Save the data
-        save.get(player).put(name.toLowerCase(), data);
+        // Prepend the data with "jafk" to avoid plugin collisions and save the data
+        save.get("jafk_" + player.getName()).put(name.toLowerCase(), data);
+    }
+
+    /**
+     * Returns the data with the key <code>name</code> from <code>player</code>'s HashMap.
+     *
+     * @param player the player to check.
+     * @param name the key to grab.
+     */
+    public static Object getData(OfflinePlayer player, String name)
+    {
+        if(save.containsKey("jafk_" + player.getName()) && save.get("jafk_" + player.getName()).containsKey(name))
+        {
+            return save.get("jafk_" + player.getName()).get(name);
+        }
+        return null;
     }
 
     /**
@@ -238,7 +301,7 @@ public class JUtility
      */
     public static void removeData(OfflinePlayer player, String name)
     {
-        if(save.containsKey(player)) save.get(player).remove(name.toLowerCase());
+        if(save.containsKey("jafk_" + player.getName())) save.get("jafk_" + player.getName()).remove(name.toLowerCase());
     }
 
     /**
@@ -248,6 +311,6 @@ public class JUtility
      */
     public static void removeAllData(OfflinePlayer player)
     {
-        save.remove(player);
+        save.remove("jafk_" + player.getName());
     }
 }

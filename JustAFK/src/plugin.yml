@@ -9,10 +9,16 @@ commands:
     justafk:
         usage: /justafk
         permission: justafk.basic
+    whosafk:
+        usage: /whosafk
+        permission: justafk.basic
 permissions:
     justafk.basic:
         description: The default permission for players.
         default: true
     justafk.admin:
         description: The administrative permission node.
+        default: false
+    justafk.immune:
+        description: Makes the player immune to automatic kicking.
         default: false

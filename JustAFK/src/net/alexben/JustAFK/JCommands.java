@@ -20,11 +20,14 @@
 package net.alexben.JustAFK;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 public class JCommands implements CommandExecutor
 {
@@ -40,7 +43,7 @@ public class JCommands implements CommandExecutor
                 if(JUtility.isAway(player))
                 {
                     JUtility.setAway(player, false);
-                    player.sendMessage(ChatColor.AQUA + "You are no longer AFK.");
+                    JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
 
                     return true;
                 }
@@ -57,27 +60,61 @@ public class JCommands implements CommandExecutor
                 JUtility.setAway(player, true);
 
                 // Send the messages.
-                player.sendMessage(ChatColor.AQUA + "You are now AFK.");
-                player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been hidden from all players.");
+                JUtility.sendMessage(player, ChatColor.AQUA + "You are now set to away.");
+
+                return true;
+            }
+            else if(command.getName().equalsIgnoreCase("whosafk"))
+            {
+                if(JUtility.getAwayPlayers().isEmpty())
+                {
+                    JUtility.sendMessage(player, "There is nobody currently set to away.");
+                    return true;
+                }
+
+                ArrayList<String> playerNames = new ArrayList<String>();
+
+                for(Player item : JUtility.getAwayPlayers())
+                {
+                    playerNames.add(item.getName());
+                }
+
+                JUtility.sendMessage(player, "These players are currently away: " + StringUtils.join(playerNames, ", "));
+
+                return true;
+            }
+            else if(command.getName().equalsIgnoreCase("setafk") && JUtility.hasPermissionOrOP(player, "justafk.admin"))
+            {
+                Player editing = Bukkit.getPlayer(args[0]);
+
+                if(editing != null)
+                {
+                    if(!JUtility.isAway(editing))
+                    {
+                        JUtility.setAway(editing, true);
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been set to away by " + player.getDisplayName() + ".");
+                    }
+                    else
+                    {
+                        JUtility.setAway(editing, false);
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been set to available by " + player.getDisplayName() + ".");
+                    }
+
+                }
 
                 return true;
             }
             else if(command.getName().equalsIgnoreCase("justafk"))
             {
-                player.sendMessage(ChatColor.AQUA + "JustAFK" + ChatColor.GRAY + " is a plugin creating for Bukkit intended for the use");
-                player.sendMessage(ChatColor.GRAY + "of simple - yet effective - AFK messages within Minecraft");
-                player.sendMessage(ChatColor.GRAY + "survival multiplayer.");
+                player.sendMessage(ChatColor.AQUA + "JustAFK" + ChatColor.GRAY + " is a plugin created for Bukkit intended for the use");
+                player.sendMessage(ChatColor.GRAY + "of simple - yet powerful - away messages and other features");
+                player.sendMessage(ChatColor.GRAY + "within Minecraft survival multiplayer.");
                 player.sendMessage("");
                 player.sendMessage(ChatColor.GRAY + "Author: " + ChatColor.AQUA + "_Alex");
                 player.sendMessage(ChatColor.GRAY + "Source: " + ChatColor.AQUA + "http://github.com/alexbennett/Minecraft-JustAFK");
 
                 return true;
             }
-        }
-
-        if(JUtility.hasPermissionOrOP(player, "justafk.admin"))
-        {
-            // TODO
         }
 
         return false;
