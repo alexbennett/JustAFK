@@ -143,7 +143,7 @@ public class JUtility
         }
 
         // If auto-kick is enabled then start the delayed task
-        if(away && JConfig.getSettingBoolean("autokick") && !hasPermissionOrOP(player, "justafk.immune"))
+        if(away && JConfig.getSettingBoolean("autokick") && !hasPermission(player, "justafk.immune"))
         {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
@@ -245,6 +245,10 @@ public class JUtility
             if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
             {
                 // Check their movement
+
+                // TODO Create a fix for players who try to escape the auto-afk and auto-kick.
+
+
                 if(getData(player, "position") != null && getData(player, "position").equals(player.getLocation()))
                 {
                     // They player is AFK, set their status

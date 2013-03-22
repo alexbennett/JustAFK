@@ -21,6 +21,8 @@ package net.alexben.JustAFK;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public class JustAFK extends JavaPlugin
 {
     @Override
@@ -39,6 +41,19 @@ public class JustAFK extends JavaPlugin
         getCommand("afk").setExecutor(executor);
         getCommand("justafk").setExecutor(executor);
         getCommand("whosafk").setExecutor(executor);
+
+        // Start metrics
+        try
+        {
+            Metrics metrics = new Metrics(this);
+            metrics.enable();
+        }
+        catch (IOException e)
+        {
+            // Metrics failed to load, log it
+            JUtility.log("warning", "Plugins metrics failed to load.");
+        }
+
 
         // Log that JustAFK successfully loaded
         JUtility.log("info", "JustAFK has been successfully enabled!");

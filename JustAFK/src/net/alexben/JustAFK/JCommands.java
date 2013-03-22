@@ -83,7 +83,7 @@ public class JCommands implements CommandExecutor
 
                 return true;
             }
-            else if(command.getName().equalsIgnoreCase("setafk") && JUtility.hasPermissionOrOP(player, "justafk.admin"))
+            else if(command.getName().equalsIgnoreCase("setafk") && JUtility.hasPermission(player, "justafk.admin"))
             {
                 Player editing = Bukkit.getPlayer(args[0]);
 
