@@ -1,15 +1,11 @@
-Overview
-========
-
-What is it?
-===========
-
 **JustAFK** brings a simple - yet powerful - AFK (away from keyboard) plugin to Bukkit servers.
+
 
 Installation
 ============
 
 To install **JustAFK**, simply drop the [JustAFK.jar](http://dev.bukkit.org/) file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
+
 
 Features
 ========
@@ -23,6 +19,7 @@ Key features of **JustAFK** include:
 * Automatic detection of players returning from AFK *(e.g. when moving or chatting)*
 * Set a status when going AFK
 
+
 Commands
 ========
 
@@ -32,9 +29,12 @@ Commands
 **/setafk <player>**: (Admin only) Sets the specified player to away.
 **/justafk**: Gives you a bit of information about JustAFK.
 
+
 Miscellaneous
 =============
 
-To get support for JustAFK or to suggest new features, just leave me a reply in the Bukkit thread [located here]().
+To get support for **JustAFK** or to suggest new features, just leave me a reply in the Bukkit thread [located here](#).
+
+
 
 [Source](http://github.com/alexbennett/Minecraft-JustAFK/) | [Censored Software](http://www.censoredsoftware.com/)
