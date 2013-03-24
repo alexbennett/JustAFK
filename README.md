@@ -1,12 +1,11 @@
 **JustAFK** brings a simple - yet powerful - AFK (away from keyboard) plugin to Bukkit servers.
 
+![JustAFK](http://alexben.net/projects/bukkit/JustAFK/justafk_logo.png)
 
 Installation
 ============
 
-To install **JustAFK**, simply drop the JustAFK.jar file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
-
-Download the JAR on the Bukkit Dev project page [located here](http://dev.bukkit.org/server-mods/justafk/).
+To install **JustAFK**, simply drop the jar file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
 
 
 Features
@@ -26,8 +25,8 @@ Commands
 * **/afk**: Sets yourself to away, making your player invisible and broadcasting a message to the server.
 * **/afk [reason]**: Sets yourself to away as above, but also includes a reason.
 * **/whosafk**: Shows you a list of who is currently set to away on the server.
-* **/setafk <player>**: (Admin only) Sets the specified player to away.
 * **/justafk**: Gives you a bit of information about JustAFK.
+* **/setafk <player>**: Sets the specified player to away.
 
 
 Permissions
@@ -38,11 +37,22 @@ Permissions
 * **justafk.admin**: Gives the player access to the admin commands (seen above) included in the plugin.
 
 
+Configuration
+=========
+
+    tagmessages: true # If enabled, all AFK messages will be tagged with "[JustAFK]"
+    autokick: true # If enabled, players will be kicked automatically if inactive
+    kicktime: 300 # The amount of time in seconds that a player can be AFK before being kicked
+    kickreason: Reason # The reason to give when kicking an AFK player.
+    movementcheckfreq: 15 # The amount of time in seconds to check player movement for inactivity.
+
+
 Miscellaneous
 =============
 
 To get support for **JustAFK** or to suggest new features, just leave a comment on the [project page](http://dev.bukkit.org/server-mods/justafk/) and I'll have a look and see what I can do!
 
 
+![MCStats](http://mcstats.org/signature/JustAFK.png)
 
 [Source](http://github.com/alexbennett/Minecraft-JustAFK/) | [Censored Software](http://www.censoredsoftware.com/)

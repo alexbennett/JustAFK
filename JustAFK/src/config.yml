@@ -5,4 +5,4 @@ tagmessages: true
 autokick: true
 movementcheckfreq: 15 #seconds
 kicktime: 300 #seconds
-kickreason: 'You were inactive for too long!'
+kickreason: '&cYou were inactive for too long!'
