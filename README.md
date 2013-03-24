@@ -25,9 +25,13 @@ Commands
 ========
 
 **/afk**: Sets yourself to away, making your player invisible and broadcasting a message to the server.
+
 **/afk [reason]**: Sets yourself to away as above, but also includes a reason.
+
 **/whosafk**: Shows you a list of who is currently set to away on the server.
+
 **/setafk <player>**: (Admin only) Sets the specified player to away.
+
 **/justafk**: Gives you a bit of information about JustAFK.
 
 
