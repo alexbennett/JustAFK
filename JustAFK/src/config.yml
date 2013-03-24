@@ -1,8 +1,8 @@
-# Default JustAFK Config
+# JustAFK Configuration
 tagmessages: true
 
 # AFK-related options
 autokick: true
-kicktime: 300 #seconds
-kickreason: You were inactive for too long!
 movementcheckfreq: 15 #seconds
+kicktime: 300 #seconds
+kickreason: 'You were inactive for too long!'

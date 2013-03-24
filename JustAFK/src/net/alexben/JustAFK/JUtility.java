@@ -155,7 +155,7 @@ public class JUtility
                     // Remove their data, show them, and then finally kick them
                     removeAllData(player);
                     for(Player onlinePlayer : Bukkit.getOnlinePlayers()) onlinePlayer.showPlayer(player);
-                    player.kickPlayer(JConfig.getSettingString("kickreason"));
+                    player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));
 
                     // Log it to the console
                     log("info", player.getName() + " has been kicked for inactivity.");
@@ -247,7 +247,6 @@ public class JUtility
                 // Check their movement
 
                 // TODO Create a fix for players who try to escape the auto-afk and auto-kick.
-
 
                 if(getData(player, "position") != null && getData(player, "position").equals(player.getLocation()))
                 {

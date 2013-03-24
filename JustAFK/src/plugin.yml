@@ -1,6 +1,6 @@
 name: JustAFK
 main: net.alexben.JustAFK.JustAFK
-version: 0.1
+version: 1.1
 author: _Alex
 commands:
     afk:
