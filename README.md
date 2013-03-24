@@ -4,8 +4,9 @@
 Installation
 ============
 
-To install **JustAFK**, simply drop the [JustAFK.jar](http://dev.bukkit.org/) file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
+To install **JustAFK**, simply drop the JustAFK.jar file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
 
+Download the JAR on the Bukkit Dev project page [located here](http://dev.bukkit.org/server-mods/justafk/).
 
 Features
 ========
@@ -33,7 +34,7 @@ Commands
 Miscellaneous
 =============
 
-To get support for **JustAFK** or to suggest new features, just leave me a reply in the Bukkit thread [located here](#).
+To get support for **JustAFK** or to suggest new features, just leave a comment on the [project page](http://dev.bukkit.org/server-mods/justafk/) and I'll have a look and see what I can do!
 
 
 
