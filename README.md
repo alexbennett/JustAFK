@@ -4,13 +4,13 @@
 Installation
 ============
 
-To install **JustAFK**, simply drop the [JustAFK.jar](http://dev.bukkit.org/) file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
+To install **JustAFK**, simply drop the JustAFK.jar file into your server's plugin directory and reload! A configuration file will be automatically created which you can edit to fine-tune your own installation.
+
+Download the JAR on the Bukkit Dev project page [located here](http://dev.bukkit.org/server-mods/justafk/).
 
 
 Features
 ========
-
-Key features of **JustAFK** include: 
 
 * Optional, automatic kicking of AFK players
 * Configurable AFK time limit
@@ -23,17 +23,25 @@ Key features of **JustAFK** include:
 Commands
 ========
 
-**/afk**: Sets yourself to away, making your player invisible and broadcasting a message to the server.
-**/afk [reason]**: Sets yourself to away as above, but also includes a reason.
-**/whosafk**: Shows you a list of who is currently set to away on the server.
-**/setafk <player>**: (Admin only) Sets the specified player to away.
-**/justafk**: Gives you a bit of information about JustAFK.
+* **/afk**: Sets yourself to away, making your player invisible and broadcasting a message to the server.
+* **/afk [reason]**: Sets yourself to away as above, but also includes a reason.
+* **/whosafk**: Shows you a list of who is currently set to away on the server.
+* **/setafk <player>**: (Admin only) Sets the specified player to away.
+* **/justafk**: Gives you a bit of information about JustAFK.
+
+
+Permissions
+=========
+
+* **justafk.basic**: The basic permission node which allows for full use of the plugin.
+* **justafk.immune**: Makes the player immune to auto-afk and auto-kicking.
+* **justafk.admin**: Gives the player access to the admin commands (seen above) included in the plugin.
 
 
 Miscellaneous
 =============
 
-To get support for **JustAFK** or to suggest new features, just leave me a reply in the Bukkit thread [located here](#).
+To get support for **JustAFK** or to suggest new features, just leave a comment on the [project page](http://dev.bukkit.org/server-mods/justafk/) and I'll have a look and see what I can do!
 
 
 
