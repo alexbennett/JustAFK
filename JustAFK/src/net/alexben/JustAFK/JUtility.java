@@ -106,11 +106,6 @@ public class JUtility
      */
     public static void setAway(final Player player, boolean away)
     {
-        // Define variables
-        String status;
-        if(away) status = "has gone";
-        else status = "is no longer";
-
         // Hide or display the player based on their away status.
         if(away)
         {
@@ -133,13 +128,20 @@ public class JUtility
         saveData(player, "isafk", away);
 
         // Send the server-wide message
-        if(away && getData(player, "message") != null)
+        if(away)
         {
-            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " away. (" + ChatColor.ITALIC + getData(player, "message") + ChatColor.RESET + ")");
+            if(getData(player, "message") != null)
+            {
+                serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_away_reason").replace("{name}", player.getDisplayName()).replace("{message}", getData(player, "message").toString()));
+            }
+            else
+            {
+                serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName()));
+            }
         }
         else
         {
-            serverMsg(ChatColor.RED + player.getDisplayName() + " " + status + " away.");
+            serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName()));
         }
 
         // If auto-kick is enabled then start the delayed task
@@ -158,7 +160,7 @@ public class JUtility
                     player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));
 
                     // Log it to the console
-                    log("info", player.getName() + " has been kicked for inactivity.");
+                    log("info", JustAFK.language.getConfig().getString("auto_kick").replace("{name}", player.getDisplayName()));
                 }
             }, JConfig.getSettingInt("kicktime") * 20);
         }
@@ -217,7 +219,7 @@ public class JUtility
      */
     public static boolean hasPermission(OfflinePlayer player, String permission)
     {
-        return player == null || player.getPlayer().hasPermission(permission);
+        return player.getPlayer().hasPermission(permission);
     }
 
     /**
@@ -230,7 +232,7 @@ public class JUtility
      */
     public static boolean hasPermissionOrOP(OfflinePlayer player, String permission)
     {
-        return player == null || player.isOp() || player.getPlayer().hasPermission(permission);
+        return player.isOp() || player.getPlayer().hasPermission(permission);
     }
 
     /**
@@ -254,7 +256,7 @@ public class JUtility
                     setAway(player, true);
 
                     // Message them
-                    player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been automatically set to away.");
+                    player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("auto_away"));
                 }
 
                 saveData(player, "position", player.getLocation());

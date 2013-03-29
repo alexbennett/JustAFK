@@ -39,6 +39,8 @@ import java.util.ArrayList;
 
 public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 {
+    public static ConfigAccessor language;
+
     @Override
     public void onEnable()
     {
@@ -54,6 +56,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
         getCommand("afk").setExecutor(this);
         getCommand("justafk").setExecutor(this);
         getCommand("whosafk").setExecutor(this);
+        getCommand("setafk").setExecutor(this);
 
         // Start metrics
         try
@@ -61,12 +64,14 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
             Metrics metrics = new Metrics(this);
             metrics.enable();
         }
-        catch (IOException e)
+        catch(IOException e)
         {
             // Metrics failed to load, log it
             JUtility.log("warning", "Plugins metrics failed to load.");
         }
 
+        // Load language
+        language = new ConfigAccessor(this, "localization.yml");
 
         // Log that JustAFK successfully loaded
         JUtility.log("info", "JustAFK has been successfully enabled!");
@@ -75,6 +80,8 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
     @Override
     public void onDisable()
     {
+        JScheduler.stopThreads();
+
         JUtility.log("info", "Disabled!");
     }
 
@@ -93,7 +100,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                 if(JUtility.isAway(player))
                 {
                     JUtility.setAway(player, false);
-                    JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
+                    JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
 
                     return true;
                 }
@@ -110,7 +117,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                 JUtility.setAway(player, true);
 
                 // Send the messages.
-                JUtility.sendMessage(player, ChatColor.AQUA + "You are now set to away.");
+                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_away"));
 
                 return true;
             }
@@ -118,7 +125,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
             {
                 if(JUtility.getAwayPlayers().isEmpty())
                 {
-                    JUtility.sendMessage(player, "There is nobody currently set to away.");
+                    JUtility.sendMessage(player, JustAFK.language.getConfig().getString("nobody_away"));
                     return true;
                 }
 
@@ -129,7 +136,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                     playerNames.add(item.getName());
                 }
 
-                JUtility.sendMessage(player, "These players are currently away: " + StringUtils.join(playerNames, ", "));
+                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("currently_away") + " " + StringUtils.join(playerNames, ", "));
 
                 return true;
             }
@@ -142,17 +149,20 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                     if(!JUtility.isAway(editing))
                     {
                         JUtility.setAway(editing, true);
-                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been set to away by " + player.getDisplayName() + ".");
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("setafk_away_private").replace("{name}", player.getDisplayName()));
                     }
                     else
                     {
                         JUtility.setAway(editing, false);
-                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + "You have been set to available by " + player.getDisplayName() + ".");
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("setafk_return_private").replace("{name}", player.getDisplayName()));
                     }
 
+                    return true;
                 }
-
-                return true;
+                else
+                {
+                    player.sendMessage(ChatColor.RED + "/setafk <player>");
+                }
             }
             else if(command.getName().equalsIgnoreCase("justafk"))
             {
@@ -194,7 +204,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
             if(JUtility.isAway(player))
             {
                 JUtility.setAway(player, false);
-                JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
+                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
             }
         }
     }
@@ -207,7 +217,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
         if(JUtility.isAway(player))
         {
             JUtility.setAway(player, false);
-            JUtility.sendMessage(player, ChatColor.AQUA + "You are no longer away.");
+            JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
         }
     }
 }
