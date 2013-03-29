@@ -18,7 +18,7 @@ Features
 * Players are automatically hidden from others when going AFK
 * Automatic detection of players returning from AFK *(e.g. when moving or chatting)*
 * Set a status when going AFK
-* Fully customizable messages via the generated `localization.yml` file.
+* Fully customizable messages via the generated `localization.yml` file
 
 
 Commands
