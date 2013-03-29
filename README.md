@@ -47,6 +47,14 @@ Configuration
     movementcheckfreq: 15 # The amount of time in seconds to check player movement for inactivity.
 
 
+Localization
+=========
+
+As of **JustAFK v1.2**, you can completely customize the messages associated with **JustAFK** by editing the generated `localization.yml` file after loading the plugin. You can use it to simply change the way the messages look, or to translate to another language. This _should_ work with most languages, but you may run into some issues with certain character types. If you have any problems with the plugin after doing a translation please let me know in the comments below.
+
+If you'd like to contribute your translation for **JustAFK**, please let me know and I'll work with you to get it included as a download alongside the plugin. Thanks!
+
+
 Miscellaneous
 =============
 
