@@ -12,11 +12,13 @@ Features
 ========
 
 * Optional, automatic kicking of AFK players
+* Outwits methods used to circumvent automatic AFK
 * Configurable AFK time limit
 * Configurable kick message
 * Players are automatically hidden from others when going AFK
 * Automatic detection of players returning from AFK *(e.g. when moving or chatting)*
 * Set a status when going AFK
+* Fully customizable messages via the generated `localization.yml` file.
 
 
 Commands
