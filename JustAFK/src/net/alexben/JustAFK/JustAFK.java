@@ -19,6 +19,7 @@
 
 package net.alexben.JustAFK;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,7 +71,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
             JUtility.log("warning", "Plugins metrics failed to load.");
         }
 
-        // Load language
+        // Load the strings/localization
         language = new ConfigAccessor(this, "localization.yml");
 
         // Log that JustAFK successfully loaded
@@ -100,7 +101,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                 if(JUtility.isAway(player))
                 {
                     JUtility.setAway(player, false);
-                    JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
+                    JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 
                     return true;
                 }
@@ -117,7 +118,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                 JUtility.setAway(player, true);
 
                 // Send the messages.
-                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_away"));
+                JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_away")));
 
                 return true;
             }
@@ -125,7 +126,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
             {
                 if(JUtility.getAwayPlayers().isEmpty())
                 {
-                    JUtility.sendMessage(player, JustAFK.language.getConfig().getString("nobody_away"));
+                    JUtility.sendMessage(player, StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("nobody_away")));
                     return true;
                 }
 
@@ -136,7 +137,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                     playerNames.add(item.getName());
                 }
 
-                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("currently_away") + " " + StringUtils.join(playerNames, ", "));
+                JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("currently_away")) + " " + StringUtils.join(playerNames, ", "));
 
                 return true;
             }
@@ -149,12 +150,12 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
                     if(!JUtility.isAway(editing))
                     {
                         JUtility.setAway(editing, true);
-                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("setafk_away_private").replace("{name}", player.getDisplayName()));
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("setafk_away_private").replace("{name}", player.getDisplayName())));
                     }
                     else
                     {
                         JUtility.setAway(editing, false);
-                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("setafk_return_private").replace("{name}", player.getDisplayName()));
+                        JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("setafk_return_private").replace("{name}", player.getDisplayName())));
                     }
 
                     return true;
@@ -199,12 +200,12 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
     {
         Player player = event.getPlayer();
 
-        if(event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ())
+        if(event.getFrom().getYaw() != event.getTo().getYaw() || event.getFrom().getPitch() != event.getTo().getPitch())
         {
             if(JUtility.isAway(player))
             {
                 JUtility.setAway(player, false);
-                JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
+                JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
             }
         }
     }
@@ -217,7 +218,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
         if(JUtility.isAway(player))
         {
             JUtility.setAway(player, false);
-            JUtility.sendMessage(player, ChatColor.AQUA + JustAFK.language.getConfig().getString("private_return"));
+            JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
         }
     }
 }

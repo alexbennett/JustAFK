@@ -19,8 +19,10 @@
 
 package net.alexben.JustAFK;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -132,16 +134,16 @@ public class JUtility
         {
             if(getData(player, "message") != null)
             {
-                serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_away_reason").replace("{name}", player.getDisplayName()).replace("{message}", getData(player, "message").toString()));
+                serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_reason").replace("{name}", player.getDisplayName()).replace("{message}", getData(player, "message").toString())));
             }
             else
             {
-                serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName()));
+                serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName())));
             }
         }
         else
         {
-            serverMsg(ChatColor.RED + JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName()));
+            serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName())));
         }
 
         // If auto-kick is enabled then start the delayed task
@@ -160,7 +162,7 @@ public class JUtility
                     player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));
 
                     // Log it to the console
-                    log("info", JustAFK.language.getConfig().getString("auto_kick").replace("{name}", player.getDisplayName()));
+                    log("info", StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("auto_kick").replace("{name}", player.getDisplayName())));
                 }
             }, JConfig.getSettingInt("kicktime") * 20);
         }
@@ -185,12 +187,7 @@ public class JUtility
      */
     public static boolean isAway(Player player)
     {
-        for(Player awayPlayer : getAwayPlayers())
-        {
-            if(player.equals(awayPlayer)) return true;
-        }
-
-        return false;
+        return getAwayPlayers().contains(player);
     }
 
     /**
@@ -219,7 +216,7 @@ public class JUtility
      */
     public static boolean hasPermission(OfflinePlayer player, String permission)
     {
-        return player.getPlayer().hasPermission(permission);
+        return player == null || player.getPlayer().hasPermission(permission);
     }
 
     /**
@@ -232,7 +229,7 @@ public class JUtility
      */
     public static boolean hasPermissionOrOP(OfflinePlayer player, String permission)
     {
-        return player.isOp() || player.getPlayer().hasPermission(permission);
+        return player == null || player.isOp() || player.getPlayer().hasPermission(permission);
     }
 
     /**
@@ -246,17 +243,22 @@ public class JUtility
             // Make sure they aren't already away
             if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
             {
+                // Define variables
+                boolean moved = false;
+
                 // Check their movement
+                if(getData(player, "position") != null)
+                {
+                    if(((Location) getData(player, "position")).getYaw() != player.getLocation().getYaw() || ((Location) getData(player, "position")).getPitch() != player.getLocation().getPitch()) moved = true;
+                }
 
-                // TODO Create a fix for players who try to escape the auto-afk and auto-kick.
-
-                if(getData(player, "position") != null && getData(player, "position").equals(player.getLocation()))
+                if(!moved)
                 {
                     // They player is AFK, set their status
                     setAway(player, true);
 
                     // Message them
-                    player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + JustAFK.language.getConfig().getString("auto_away"));
+                    player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("auto_away")));
                 }
 
                 saveData(player, "position", player.getLocation());
@@ -274,13 +276,13 @@ public class JUtility
     public static void saveData(OfflinePlayer player, String name, Object data)
     {
         // Create new save for the player if one doesn't already exist
-        if(!save.containsKey("jafk_" + player.getName()))
+        if(!save.containsKey(player.getName()))
         {
-            save.put("jafk_" + player.getName(), new HashMap<String, Object>());
+            save.put(player.getName(), new HashMap<String, Object>());
         }
 
         // Prepend the data with "jafk" to avoid plugin collisions and save the data
-        save.get("jafk_" + player.getName()).put(name.toLowerCase(), data);
+        save.get(player.getName()).put(name.toLowerCase(), data);
     }
 
     /**
@@ -291,9 +293,9 @@ public class JUtility
      */
     public static Object getData(OfflinePlayer player, String name)
     {
-        if(save.containsKey("jafk_" + player.getName()) && save.get("jafk_" + player.getName()).containsKey(name))
+        if(save.containsKey(player.getName()) && save.get(player.getName()).containsKey(name))
         {
-            return save.get("jafk_" + player.getName()).get(name);
+            return save.get(player.getName()).get(name);
         }
         return null;
     }
@@ -306,7 +308,7 @@ public class JUtility
      */
     public static void removeData(OfflinePlayer player, String name)
     {
-        if(save.containsKey("jafk_" + player.getName())) save.get("jafk_" + player.getName()).remove(name.toLowerCase());
+        if(save.containsKey(player.getName())) save.get(player.getName()).remove(name.toLowerCase());
     }
 
     /**
@@ -316,6 +318,6 @@ public class JUtility
      */
     public static void removeAllData(OfflinePlayer player)
     {
-        save.remove("jafk_" + player.getName());
+        save.remove(player.getName());
     }
 }

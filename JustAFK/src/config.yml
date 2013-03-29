@@ -3,6 +3,6 @@ tagmessages: true
 
 # AFK-related options
 autokick: true
-movementcheckfreq: 60 #seconds
+movementcheckfreq: 30 #seconds
 kicktime: 300 #seconds
 kickreason: '&cYou were inactive for too long!'

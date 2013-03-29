@@ -1,6 +1,6 @@
-# Language YAML
+# Strings YAML
 auto_kick: '{name} has been kicked for inactivity.'
-auto_away: 'You have been automatically set to away.'
+auto_away: 'Are you still there?'
 private_return: 'You are no longer away.'
 public_return: '{name} is no longer away.'
 private_away: 'You have been set to away.'

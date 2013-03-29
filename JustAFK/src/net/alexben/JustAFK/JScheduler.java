@@ -36,7 +36,7 @@ public class JScheduler
     public static void startThreads()
     {
         // Setup threads for checking player movement
-        Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable()
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
             @Override
             public void run()
