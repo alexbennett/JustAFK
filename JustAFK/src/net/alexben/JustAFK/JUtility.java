@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class JUtility
@@ -174,7 +173,7 @@ public class JUtility
 
 	/**
 	 * Sets the <code>player</code>'s away message to <code>msg</code>.
-	 * 
+	 *
 	 * @param player the player to update.
 	 * @param msg the message to
 	 */
@@ -185,7 +184,7 @@ public class JUtility
 
 	/**
 	 * Returns true if the <code>player</code> is currently AFK.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @return boolean
 	 */
@@ -216,7 +215,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code>.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -228,7 +227,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code> or is an OP.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -247,7 +246,7 @@ public class JUtility
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			// Make sure they aren't already away
-			if((!isAway(player)) && !hasPermissionOrOP(player, "justafk.immune"))
+			if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
 			{
 				// Define variables
 				boolean moved = true;
