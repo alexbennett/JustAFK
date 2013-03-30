@@ -74,6 +74,14 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		// Load the strings/localization
 		language = new ConfigAccessor(this, "localization.yml");
 
+        // Register all currently online players
+        for(Player player : getServer().getOnlinePlayers())
+        {
+            JUtility.saveData(player, "isafk", false);
+            JUtility.saveData(player, "iscertain", true);
+            JUtility.saveData(player, "position", player.getLocation());
+        }
+
 		// Log that JustAFK successfully loaded
 		JUtility.log("info", "JustAFK has been successfully enabled!");
 	}
@@ -100,7 +108,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 			{
 				if(JUtility.isAway(player))
 				{
-					JUtility.setAway(player, false);
+					JUtility.setAway(player, false, true);
 					JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 
 					return true;
@@ -115,7 +123,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 				}
 
 				// Now set away status
-				JUtility.setAway(player, true);
+				JUtility.setAway(player, true, true);
 
 				// Send the messages.
 				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_away")));
@@ -124,7 +132,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 			}
 			else if(command.getName().equalsIgnoreCase("whosafk"))
 			{
-				if(JUtility.getAwayPlayers().isEmpty())
+				if(JUtility.getAwayPlayers(true).isEmpty())
 				{
 					JUtility.sendMessage(player, StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("nobody_away")));
 					return true;
@@ -132,7 +140,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 
 				ArrayList<String> playerNames = new ArrayList<String>();
 
-				for(Player item : JUtility.getAwayPlayers())
+				for(Player item : JUtility.getAwayPlayers(true))
 				{
 					playerNames.add(item.getName());
 				}
@@ -149,12 +157,12 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 				{
 					if(!JUtility.isAway(editing))
 					{
-						JUtility.setAway(editing, true);
+						JUtility.setAway(editing, true, true);
 						JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("setafk_away_private").replace("{name}", player.getDisplayName())));
 					}
 					else
 					{
-						JUtility.setAway(editing, false);
+						JUtility.setAway(editing, false, true);
 						JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("setafk_return_private").replace("{name}", player.getDisplayName())));
 					}
 
@@ -189,7 +197,11 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	{
 		Player player = event.getPlayer();
 
-		for(Player awayPlayer : JUtility.getAwayPlayers())
+        JUtility.saveData(player, "isafk", false);
+        JUtility.saveData(player, "iscertain", true);
+        JUtility.saveData(player, "position", player.getLocation());
+
+		for(Player awayPlayer : JUtility.getAwayPlayers(true))
 		{
 			player.hidePlayer(awayPlayer);
 		}
@@ -204,7 +216,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		{
 			if(JUtility.isAway(player))
 			{
-				JUtility.setAway(player, false);
+				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
 				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 			}
 		}
@@ -217,7 +229,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 
 		if(JUtility.isAway(player))
 		{
-			JUtility.setAway(player, false);
+			JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
 			JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 		}
 	}

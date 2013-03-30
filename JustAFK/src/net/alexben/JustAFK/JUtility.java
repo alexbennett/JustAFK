@@ -101,22 +101,23 @@ public class JUtility
 	}
 
 	/**
-	 * Sets the <code>player</code>'s away status to <code>boolean</code>.
+	 * Sets the <code>player</code>'s away status to <code>boolean</code>, with certainty set to <code>certain</code>.
 	 * 
 	 * @param player the player to update.
 	 * @param away the away status to set.
+     * @param certain the certainty status to set.
 	 */
-	public static void setAway(final Player player, boolean away)
+	public static void setAway(final Player player, boolean away, boolean certain)
 	{
 		// Hide or display the player based on their away status.
-		if(away)
+		if(away && certain)
 		{
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers())
 			{
 				onlinePlayer.hidePlayer(player);
 			}
 		}
-		else
+		else if(!away)
 		{
 			removeAllData(player);
 
@@ -127,10 +128,11 @@ public class JUtility
 		}
 
 		// Save their availability
-		saveData(player, "isafk", away);
+        saveData(player, "isafk", away);
+        saveData(player, "iscertain", certain);
 
 		// Send the server-wide message
-		if(away)
+		if(away && certain)
 		{
 			if(getData(player, "message") != null)
 			{
@@ -141,7 +143,7 @@ public class JUtility
 				serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName())));
 			}
 		}
-		else
+		else if(!away && certain)
 		{
 			serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName())));
 		}
@@ -171,7 +173,7 @@ public class JUtility
 
 	/**
 	 * Sets the <code>player</code>'s away message to <code>msg</code>.
-	 * 
+	 *
 	 * @param player the player to update.
 	 * @param msg the message to
 	 */
@@ -182,27 +184,30 @@ public class JUtility
 
 	/**
 	 * Returns true if the <code>player</code> is currently AFK.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @return boolean
 	 */
 	public static boolean isAway(Player player)
 	{
-		return getAwayPlayers().contains(player);
+		return getAwayPlayers(true).contains(player) || getAwayPlayers(false).contains(player);
 	}
 
 	/**
-	 * Returns an ArrayList of all currently away players.
-	 * 
+	 * Returns an ArrayList of all currently away players, with certainty set to <code>certain</code>.
+	 *
+     * @param certain the certainty of being AFK.
 	 * @return ArrayList
 	 */
-	public static ArrayList<Player> getAwayPlayers()
+	public static ArrayList<Player> getAwayPlayers(boolean certain)
 	{
 		ArrayList<Player> players = new ArrayList<Player>();
 
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			if(getData(player, "isafk") != null && getData(player, "isafk").equals(true)) players.add(player);
+            if(getData(player, "isafk") == null || getData(player, "isafk").equals(false)) continue;
+            if(certain && (getData(player, "iscertain") == null || getData(player, "iscertain").equals(false))) continue;
+            players.add(player);
 		}
 
 		return players;
@@ -210,7 +215,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code>.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -222,7 +227,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code> or is an OP.
-	 * 
+	 *
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -244,18 +249,20 @@ public class JUtility
 			if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
 			{
 				// Define variables
-				boolean moved = false;
+				boolean moved = true;
+                boolean certain = false;
 
 				// Check their movement
 				if(getData(player, "position") != null)
 				{
-					if(((Location) getData(player, "position")).getYaw() != player.getLocation().getYaw() || ((Location) getData(player, "position")).getPitch() != player.getLocation().getPitch()) moved = true;
+					if(((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) moved = false;
+                    if(!moved && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
 				}
 
 				if(!moved)
 				{
 					// They player is AFK, set their status
-					setAway(player, true);
+					setAway(player, true, certain);
 
 					// Message them
 					player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("auto_away")));
