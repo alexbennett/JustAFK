@@ -151,6 +151,8 @@ public class JUtility
 		// If auto-kick is enabled then start the delayed task
 		if(away && JConfig.getSettingBoolean("autokick") && !hasPermission(player, "justafk.immune"))
 		{
+            if(player.isInsideVehicle() && !JConfig.getSettingBoolean("kickwhileinvehicle")) return;
+
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
 			{
 				@Override
@@ -252,10 +254,12 @@ public class JUtility
 				boolean moved = true;
                 boolean certain = false;
 
-				// Check their movement
+                // Check their movement
 				if(getData(player, "position") != null)
 				{
-					if(((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) moved = false;
+					if(player.isInsideVehicle() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) moved = false;
+                    else if((((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch())) moved = false;
+
                     if(!moved && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
 				}
 

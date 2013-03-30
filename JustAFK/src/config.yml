@@ -6,3 +6,4 @@ autokick: true
 movementcheckfreq: 30 #seconds
 kicktime: 300 #seconds
 kickreason: '&cYou were inactive for too long!'
+kickwhileinvehicle: false
