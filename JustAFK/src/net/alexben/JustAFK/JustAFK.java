@@ -155,7 +155,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 
 				if(editing != null)
 				{
-					if(!JUtility.isAway(player))
+					if(!JUtility.isAway(editing))
 					{
 						JUtility.setAway(editing, true, true);
 						JUtility.sendMessage(editing, ChatColor.GRAY + "" + ChatColor.ITALIC + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("setafk_away_private").replace("{name}", player.getDisplayName())));
