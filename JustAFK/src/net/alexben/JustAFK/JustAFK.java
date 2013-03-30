@@ -211,14 +211,21 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	private void onPlayerMove(PlayerMoveEvent event)
 	{
 		Player player = event.getPlayer();
+        boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
+        boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
 
-		if(event.getFrom().getYaw() != event.getTo().getYaw() || event.getFrom().getPitch() != event.getTo().getPitch())
+		if(yawChange || pitchChange)
 		{
-			if(JUtility.isAway(player))
+			if(!player.isInsideVehicle() && JUtility.isAway(player))
 			{
 				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
 				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 			}
+            else if(pitchChange && JUtility.isAway(player))
+            {
+                JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
+                JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+            }
 		}
 	}
 
