@@ -74,13 +74,13 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		// Load the strings/localization
 		language = new ConfigAccessor(this, "localization.yml");
 
-        // Register all currently online players
-        for(Player player : getServer().getOnlinePlayers())
-        {
-            JUtility.saveData(player, "isafk", false);
-            JUtility.saveData(player, "iscertain", true);
-            JUtility.saveData(player, "position", player.getLocation());
-        }
+		// Register all currently online players
+		for(Player player : getServer().getOnlinePlayers())
+		{
+			JUtility.saveData(player, "isafk", false);
+			JUtility.saveData(player, "iscertain", true);
+			JUtility.saveData(player, "position", player.getLocation());
+		}
 
 		// Log that JustAFK successfully loaded
 		JUtility.log("info", "JustAFK has been successfully enabled!");
@@ -197,9 +197,9 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	{
 		Player player = event.getPlayer();
 
-        JUtility.saveData(player, "isafk", false);
-        JUtility.saveData(player, "iscertain", true);
-        JUtility.saveData(player, "position", player.getLocation());
+		JUtility.saveData(player, "isafk", false);
+		JUtility.saveData(player, "iscertain", true);
+		JUtility.saveData(player, "position", player.getLocation());
 
 		for(Player awayPlayer : JUtility.getAwayPlayers(true))
 		{
@@ -211,8 +211,8 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	private void onPlayerMove(PlayerMoveEvent event)
 	{
 		Player player = event.getPlayer();
-        boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
-        boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
+		boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
+		boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
 
 		if(yawChange || pitchChange)
 		{
@@ -221,11 +221,11 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
 				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 			}
-            else if(pitchChange && JUtility.isAway(player))
-            {
-                JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
-                JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
-            }
+			else if(pitchChange && JUtility.isAway(player))
+			{
+				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
+				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+			}
 		}
 	}
 
