@@ -41,7 +41,7 @@ public class JScheduler
 			@Override
 			public void run()
 			{
-				JUtility.checkMovement();
+				JUtility.checkActivity();
 			}
 		}, 0, JConfig.getSettingInt("movementcheckfreq") * 20);
 	}
