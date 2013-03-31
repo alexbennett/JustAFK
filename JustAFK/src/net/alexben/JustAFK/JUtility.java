@@ -105,7 +105,7 @@ public class JUtility
 	 * 
 	 * @param player the player to update.
 	 * @param away the away status to set.
-     * @param certain the certainty status to set.
+	 * @param certain the certainty status to set.
 	 */
 	public static void setAway(final Player player, boolean away, boolean certain)
 	{
@@ -128,8 +128,8 @@ public class JUtility
 		}
 
 		// Save their availability
-        saveData(player, "isafk", away);
-        saveData(player, "iscertain", certain);
+		saveData(player, "isafk", away);
+		saveData(player, "iscertain", certain);
 
 		// Send the server-wide message
 		if(away && certain)
@@ -151,7 +151,7 @@ public class JUtility
 		// If auto-kick is enabled then start the delayed task
 		if(away && JConfig.getSettingBoolean("autokick") && !hasPermission(player, "justafk.immune"))
 		{
-            if(player.isInsideVehicle() && !JConfig.getSettingBoolean("kickwhileinvehicle")) return;
+			if(player.isInsideVehicle() && !JConfig.getSettingBoolean("kickwhileinvehicle")) return;
 
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
 			{
@@ -175,7 +175,7 @@ public class JUtility
 
 	/**
 	 * Sets the <code>player</code>'s away message to <code>msg</code>.
-	 *
+	 * 
 	 * @param player the player to update.
 	 * @param msg the message to
 	 */
@@ -186,7 +186,7 @@ public class JUtility
 
 	/**
 	 * Returns true if the <code>player</code> is currently AFK.
-	 *
+	 * 
 	 * @param player the player to check.
 	 * @return boolean
 	 */
@@ -197,8 +197,8 @@ public class JUtility
 
 	/**
 	 * Returns an ArrayList of all currently away players, with certainty set to <code>certain</code>.
-	 *
-     * @param certain the certainty of being AFK.
+	 * 
+	 * @param certain the certainty of being AFK.
 	 * @return ArrayList
 	 */
 	public static ArrayList<Player> getAwayPlayers(boolean certain)
@@ -207,9 +207,9 @@ public class JUtility
 
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-            if(getData(player, "isafk") == null || getData(player, "isafk").equals(false)) continue;
-            if(certain && (getData(player, "iscertain") == null || getData(player, "iscertain").equals(false))) continue;
-            players.add(player);
+			if(getData(player, "isafk") == null || getData(player, "isafk").equals(false)) continue;
+			if(certain && (getData(player, "iscertain") == null || getData(player, "iscertain").equals(false))) continue;
+			players.add(player);
 		}
 
 		return players;
@@ -217,7 +217,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code>.
-	 *
+	 * 
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -229,7 +229,7 @@ public class JUtility
 
 	/**
 	 * Returns true if <code>player</code> has the permission called <code>permission</code> or is an OP.
-	 *
+	 * 
 	 * @param player the player to check.
 	 * @param permission the permission to check for.
 	 * @return boolean
@@ -252,15 +252,15 @@ public class JUtility
 			{
 				// Define variables
 				boolean moved = true;
-                boolean certain = false;
+				boolean certain = false;
 
-                // Check their movement
+				// Check their movement
 				if(getData(player, "position") != null)
 				{
 					if(player.isInsideVehicle() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) moved = false;
-                    else if((((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch())) moved = false;
+					else if((((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch())) moved = false;
 
-                    if(!moved && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
+					if(!moved && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
 				}
 
 				if(!moved)
