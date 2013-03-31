@@ -19,16 +19,16 @@
 
 package net.alexben.JustAFK;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Logger;
 
 public class JUtility
 {
@@ -120,9 +120,9 @@ public class JUtility
 		else if(!away)
 		{
 			removeData(player, "isafk");
-            removeData(player, "iscertain");
-            removeData(player, "message");
-            removeData(player, "position");
+			removeData(player, "iscertain");
+			removeData(player, "message");
+			removeData(player, "position");
 
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers())
 			{
@@ -198,17 +198,17 @@ public class JUtility
 		return getAwayPlayers(true).contains(player) || getAwayPlayers(false).contains(player);
 	}
 
-    /**
-     * Returns true if the <code>player</code> is currently AFK, with a certainty of <code>certain</code>.
-     *
-     * @param player the player to check.
-     * @param certain the certainty to check.
-     * @return boolean
-     */
-    public static boolean isAway(Player player, boolean certain)
-    {
-        return getAwayPlayers(certain).contains(player);
-    }
+	/**
+	 * Returns true if the <code>player</code> is currently AFK, with a certainty of <code>certain</code>.
+	 * 
+	 * @param player the player to check.
+	 * @param certain the certainty to check.
+	 * @return boolean
+	 */
+	public static boolean isAway(Player player, boolean certain)
+	{
+		return getAwayPlayers(certain).contains(player);
+	}
 
 	/**
 	 * Returns an ArrayList of all currently away players, with certainty set to <code>certain</code>.
@@ -280,11 +280,11 @@ public class JUtility
 
 				if(!active)
 				{
-                    // Check for lack of other activity
-                    Long lastActive = Long.parseLong("" + getData(player, "lastactive"));
-                    Long checkFreq = Long.parseLong("" + JConfig.getSettingInt("movementcheckfreq")) * 1000;
+					// Check for lack of other activity
+					Long lastActive = Long.parseLong("" + getData(player, "lastactive"));
+					Long checkFreq = Long.parseLong("" + JConfig.getSettingInt("movementcheckfreq")) * 1000;
 
-                    if(lastActive >= System.currentTimeMillis() - checkFreq) return;
+					if(lastActive >= System.currentTimeMillis() - checkFreq) return;
 
 					// They player is AFK, set their status
 					setAway(player, true, certain);
