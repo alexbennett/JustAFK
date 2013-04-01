@@ -19,10 +19,14 @@
 
 package net.alexben.JustAFK;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,13 +34,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 {
@@ -79,7 +81,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		{
 			JUtility.saveData(player, "isafk", false);
 			JUtility.saveData(player, "iscertain", true);
-			JUtility.saveData(player, "position", player.getLocation());
+			JUtility.saveData(player, "lastactive", System.currentTimeMillis());
 		}
 
 		// Log that JustAFK successfully loaded
@@ -199,7 +201,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 
 		JUtility.saveData(player, "isafk", false);
 		JUtility.saveData(player, "iscertain", true);
-		JUtility.saveData(player, "position", player.getLocation());
+		JUtility.saveData(player, "lastactive", System.currentTimeMillis());
 
 		for(Player awayPlayer : JUtility.getAwayPlayers(true))
 		{
@@ -211,19 +213,33 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	private void onPlayerMove(PlayerMoveEvent event)
 	{
 		Player player = event.getPlayer();
+		boolean certain = Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString());
 		boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
 		boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
 
-		if(yawChange || pitchChange)
+		if(!JUtility.isAway(player)) return;
+
+		if(certain)
 		{
-			if(!player.isInsideVehicle() && JUtility.isAway(player))
+			JUtility.setAway(player, false, certain);
+			JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+			return;
+		}
+		else
+		{
+			if(!player.isInsideVehicle())
 			{
-				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
-				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+				if(pitchChange)
+				{
+					JUtility.setAway(player, false, certain);
+					JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+					return;
+				}
 			}
-			else if(pitchChange && JUtility.isAway(player))
+
+			if(yawChange || pitchChange)
 			{
-				JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
+				JUtility.setAway(player, false, certain);
 				JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 			}
 		}
@@ -234,10 +250,27 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	{
 		Player player = event.getPlayer();
 
+		JUtility.saveData(player, "lastactive", System.currentTimeMillis());
+
 		if(JUtility.isAway(player))
 		{
-			JUtility.setAway(player, false, Boolean.getBoolean(JUtility.getData(player, "iscertain").toString()));
+			JUtility.setAway(player, false, Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString()));
 			JUtility.sendMessage(player, ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	private void onInventoryClick(InventoryClickEvent event)
+	{
+		OfflinePlayer player = Bukkit.getOfflinePlayer(event.getWhoClicked().getName());
+
+		JUtility.saveData(player, "lastactive", System.currentTimeMillis());
+
+		assert player.isOnline() : player.getName() + " is not online.";
+		if(JUtility.isAway(player.getPlayer()))
+		{
+			JUtility.setAway(player.getPlayer(), false, Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString()));
+			JUtility.sendMessage(player.getPlayer(), ChatColor.AQUA + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("private_return")));
 		}
 	}
 }

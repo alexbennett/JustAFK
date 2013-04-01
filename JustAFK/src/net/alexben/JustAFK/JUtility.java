@@ -19,16 +19,16 @@
 
 package net.alexben.JustAFK;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Logger;
 
 public class JUtility
 {
@@ -119,7 +119,10 @@ public class JUtility
 		}
 		else if(!away)
 		{
-			removeAllData(player);
+			removeData(player, "isafk");
+			removeData(player, "iscertain");
+			removeData(player, "message");
+			removeData(player, "position");
 
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers())
 			{
@@ -196,6 +199,18 @@ public class JUtility
 	}
 
 	/**
+	 * Returns true if the <code>player</code> is currently AFK, with a certainty of <code>certain</code>.
+	 * 
+	 * @param player the player to check.
+	 * @param certain the certainty to check.
+	 * @return boolean
+	 */
+	public static boolean isAway(Player player, boolean certain)
+	{
+		return getAwayPlayers(certain).contains(player);
+	}
+
+	/**
 	 * Returns an ArrayList of all currently away players, with certainty set to <code>certain</code>.
 	 * 
 	 * @param certain the certainty of being AFK.
@@ -242,7 +257,7 @@ public class JUtility
 	/**
 	 * Checks movement for all online players and marks them as AFK if need-be.
 	 */
-	public static void checkMovement()
+	public static void checkActivity()
 	{
 		// Get all online players
 		for(Player player : Bukkit.getOnlinePlayers())
@@ -251,20 +266,26 @@ public class JUtility
 			if(!isAway(player) && !hasPermissionOrOP(player, "justafk.immune"))
 			{
 				// Define variables
-				boolean moved = true;
+				boolean active = true;
 				boolean certain = false;
 
 				// Check their movement
 				if(getData(player, "position") != null)
 				{
-					if(player.isInsideVehicle() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) moved = false;
-					else if((((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch())) moved = false;
+					if(player.isInsideVehicle() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch()) active = false;
+					else if((((Location) getData(player, "position")).getYaw() == player.getLocation().getYaw() && ((Location) getData(player, "position")).getPitch() == player.getLocation().getPitch())) active = false;
 
-					if(!moved && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
+					if(!active && (((Location) getData(player, "position")).getX() == player.getLocation().getX()) && ((Location) getData(player, "position")).getY() == player.getLocation().getY() && ((Location) getData(player, "position")).getZ() == player.getLocation().getZ()) certain = true;
 				}
 
-				if(!moved)
+				if(!active)
 				{
+					// Check for lack of other activity
+					Long lastActive = Long.parseLong("" + getData(player, "lastactive"));
+					Long checkFreq = Long.parseLong("" + JConfig.getSettingInt("movementcheckfreq")) * 1000;
+
+					if(lastActive >= System.currentTimeMillis() - checkFreq) return;
+
 					// They player is AFK, set their status
 					setAway(player, true, certain);
 
