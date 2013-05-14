@@ -19,9 +19,6 @@
 
 package net.alexben.JustAFK;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -39,6 +36,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 {
@@ -104,7 +104,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	{
 		Player player = (Player) sender;
 
-		if(JUtility.hasPermission(player, "justafk.basic"))
+		if(JUtility.hasPermissionOrOP(player, "justafk.basic"))
 		{
 			if(command.getName().equalsIgnoreCase("afk"))
 			{

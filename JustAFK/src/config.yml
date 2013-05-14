@@ -3,7 +3,8 @@ tagmessages: true
 
 # AFK-related options
 autokick: true
+broadcastawaymsg: true
 movementcheckfreq: 30 #seconds
-kicktime: 300 #seconds
+kicktime: 60 #seconds
 kickreason: '&cYou were inactive for too long!'
-kickwhileinvehicle: false
+kickwhileinvehicle: true

@@ -19,16 +19,16 @@
 
 package net.alexben.JustAFK;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Logger;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class JUtility
 {
@@ -135,21 +135,25 @@ public class JUtility
 		saveData(player, "iscertain", certain);
 
 		// Send the server-wide message
-		if(away && certain)
-		{
-			if(getData(player, "message") != null)
-			{
-				serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_reason").replace("{name}", player.getDisplayName()).replace("{message}", getData(player, "message").toString())));
-			}
-			else
-			{
-				serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName())));
-			}
-		}
-		else if(!away && certain)
-		{
-			serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName())));
-		}
+        if(JConfig.getSettingBoolean("broadcastawaymsg"))
+        {
+            if(away && certain)
+            {
+                if(getData(player, "message") != null)
+                {
+                    serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_reason").replace("{name}", player.getDisplayName()).replace("{message}", getData(player, "message").toString())));
+                }
+                else
+                {
+                    serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_away_generic").replace("{name}", player.getDisplayName())));
+                }
+
+            }
+            else if(!away && certain)
+            {
+                serverMsg(ChatColor.RED + StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("public_return").replace("{name}", player.getDisplayName())));
+            }
+        }
 
 		// If auto-kick is enabled then start the delayed task
 		if(away && JConfig.getSettingBoolean("autokick") && !hasPermission(player, "justafk.immune"))
@@ -165,9 +169,13 @@ public class JUtility
 
 					// Remove their data, show them, and then finally kick them
 					removeAllData(player);
-					for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+
+                    for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+                    {
 						onlinePlayer.showPlayer(player);
-					player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));
+                    }
+
+                    player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));
 
 					// Log it to the console
 					log("info", StringEscapeUtils.unescapeJava(JustAFK.language.getConfig().getString("auto_kick").replace("{name}", player.getDisplayName())));
