@@ -79,9 +79,14 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		// Register all currently online players
 		for(Player player : getServer().getOnlinePlayers())
 		{
-			JUtility.saveData(player, "isafk", false);
-			JUtility.saveData(player, "iscertain", true);
-			JUtility.saveData(player, "lastactive", System.currentTimeMillis());
+            JUtility.saveData(player, "isafk", false);
+            JUtility.saveData(player, "iscertain", true);
+            JUtility.saveData(player, "lastactive", System.currentTimeMillis());
+
+            for(Player awayPlayer : JUtility.getAwayPlayers(true))
+            {
+                player.hidePlayer(awayPlayer);
+            }
 		}
 
 		// Log that JustAFK successfully loaded
@@ -93,7 +98,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	{
 		JScheduler.stopThreads();
 
-		JUtility.log("info", "Disabled!");
+		JUtility.log("info", "JustAFK has been disabled!");
 	}
 
 	/**
@@ -213,7 +218,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	private void onPlayerMove(PlayerMoveEvent event)
 	{
 		Player player = event.getPlayer();
-		boolean certain = Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString());
+       	boolean certain = Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString());
 		boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
 		boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
 

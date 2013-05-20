@@ -170,9 +170,12 @@ public class JUtility
 					// Remove their data, show them, and then finally kick them
 					removeAllData(player);
 
-                    for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+                    if(JConfig.getSettingBoolean("hideawayplayers"))
                     {
-						onlinePlayer.showPlayer(player);
+                        for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+                        {
+                            onlinePlayer.showPlayer(player);
+                        }
                     }
 
                     player.kickPlayer(ChatColor.translateAlternateColorCodes('&', JConfig.getSettingString("kickreason")));

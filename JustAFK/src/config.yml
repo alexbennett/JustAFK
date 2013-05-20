@@ -3,6 +3,7 @@ tagmessages: true
 
 # AFK-related options
 autokick: true
+hideawayplayers: true
 broadcastawaymsg: true
 movementcheckfreq: 30 #seconds
 kicktime: 60 #seconds
