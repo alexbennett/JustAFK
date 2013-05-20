@@ -5,10 +5,10 @@
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
     <target name="init">
-        <mkdir dir="core/bin"/>
+        <mkdir dir="JustAFK/bin"/>
     	<mkdir dir="build"/>
-        <copy includeemptydirs="false" todir="core/bin">
-            <fileset dir="core/src">
+        <copy includeemptydirs="false" todir="JustAFK/bin">
+            <fileset dir="JustAFK/src">
                 <exclude name="**/*.java"/>
             </fileset>
             <filterset>
@@ -17,7 +17,7 @@
         </copy>
     </target>
     <target name="clean">
-        <delete dir="core/bin"/>
+        <delete dir="JustAFK/bin"/>
     	<delete dir="build"/>
     </target>
     <target depends="clean" name="cleanall"/>
@@ -28,10 +28,10 @@
         <path id="JustAFK.classpath">
             <pathelement location="lib/Craftbukkit.jar"/>
         </path>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="core/bin" source="${source}" target="${target}">
-            <src path="core/src"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="JustAFK/bin" source="${source}" target="${target}">
+            <src path="JustAFK/src"/>
             <classpath refid="JustAFK.classpath"/>
         </javac>
-        <jar jarfile="build/JustAFK.jar" basedir="core/bin"/>
+        <jar jarfile="build/JustAFK.jar" basedir="JustAFK/bin"/>
     </target>
 </project>
