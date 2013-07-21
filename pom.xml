@@ -16,7 +16,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bukkit.version>1.6.2-R0.1-SNAPSHOT</bukkit.version>
         <mcstats.version>R7</mcstats.version>
-        <commandbook.version>2.3.1-SNAPSHOT</commandbook.version>
     </properties>
 
     <scm>
@@ -52,10 +51,6 @@
             <id>Plugin Metrics</id>
             <url>http://repo.mcstats.org/content/repositories/public</url>
         </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -73,14 +68,6 @@
             <version>${mcstats.version}</version>
             <scope>compile</scope>
             <optional>false</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>commandbook</artifactId>
-            <version>${commandbook.version}</version>
-            <scope>compile</scope>
-            <type>jar</type>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 

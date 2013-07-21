@@ -1,7 +1,8 @@
 package net.alexben.JustAFK;
 
-import com.sk89q.commandbook.CommandBook;
-import com.sk89q.commandbook.commands.CommandBookCommands;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -19,9 +20,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 {
@@ -70,9 +68,9 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		// Register all currently online players
 		for(Player player : getServer().getOnlinePlayers())
 		{
-            JUtility.saveData(player, "isafk", false);
-            JUtility.saveData(player, "iscertain", true);
-            JUtility.saveData(player, "lastactive", System.currentTimeMillis());
+			JUtility.saveData(player, "isafk", false);
+			JUtility.saveData(player, "iscertain", true);
+			JUtility.saveData(player, "lastactive", System.currentTimeMillis());
 
 			if(JConfig.getSettingBoolean("hideawayplayers"))
 			{
@@ -215,7 +213,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 	private void onPlayerMove(PlayerMoveEvent event)
 	{
 		Player player = event.getPlayer();
-       	boolean certain = Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString());
+		boolean certain = Boolean.parseBoolean(JUtility.getData(player, "iscertain").toString());
 		boolean yawChange = event.getFrom().getYaw() != event.getTo().getYaw();
 		boolean pitchChange = event.getFrom().getPitch() != event.getTo().getPitch();
 
