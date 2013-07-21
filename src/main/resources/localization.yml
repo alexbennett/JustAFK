@@ -1,0 +1,12 @@
+# Strings YAML
+auto_kick: '{name} has been kicked for inactivity.'
+auto_away: 'Are you still there? Look around, if you are.'
+private_return: 'You are no longer away.'
+public_return: '{name} is no longer away.'
+private_away: 'You have been set to away.'
+public_away_reason: '{name} has been set to away. ({message})'
+public_away_generic: '{name} has been set to away.'
+currently_away: 'These players are currently set to away:'
+nobody_away: 'There is nobody currently set to away.'
+setafk_away_private: 'You have been set to away by {name}.'
+setafk_return_private: 'You have been set to available by {name}.'

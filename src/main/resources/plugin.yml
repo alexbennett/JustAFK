@@ -1,0 +1,23 @@
+name: JustAFK
+main: net.alexben.JustAFK.JustAFK
+version: ${project.version}
+author: _Alex
+commands:
+    afk:
+        usage: /afk [reason]
+    justafk:
+        usage: /justafk
+    whosafk:
+        usage: /whosafk
+    setafk:
+        usage: /setafk <player>
+permissions:
+    justafk.basic:
+        description: The default permission for players.
+        default: true
+    justafk.admin:
+        description: The administrative permission node.
+        default: op
+    justafk.immune:
+        description: Makes the player immune to automatic kicking.
+        default: op
