@@ -6,7 +6,7 @@
 
     <groupId>net.alexben.minecraft</groupId>
     <artifactId>JustAFK</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
     <packaging>jar</packaging>
 
     <name>JustAFK for Bukkit</name>
