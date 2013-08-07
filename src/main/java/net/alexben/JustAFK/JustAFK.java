@@ -54,7 +54,7 @@ public class JustAFK extends JavaPlugin implements CommandExecutor, Listener
 		try
 		{
 			Metrics metrics = new Metrics(this);
-			metrics.enable();
+			metrics.start();
 		}
 		catch(IOException e)
 		{
