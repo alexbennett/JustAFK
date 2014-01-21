@@ -6,37 +6,24 @@
 
     <groupId>net.alexben.minecraft</groupId>
     <artifactId>JustAFK</artifactId>
-    <version>1.2.5</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
-    <name>JustAFK for Bukkit</name>
-    <url>http://github.com/alexbennett/Minecraft-JustAFK</url>
+    <name>JustAFK</name>
+    <url>http://github.com/alexbennett/JustAFK</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.6.2-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.7.2-R0.2</bukkit.version>
         <mcstats.version>R7</mcstats.version>
     </properties>
 
     <scm>
-        <connection>scm:git:git://github.com/alexbennett/Minecraft-JustAFK.git</connection>
-        <developerConnection>scm:git:git://github.com/alexbennett/Minecraft-JustAFK.git</developerConnection>
+        <connection>scm:git:git://github.com/alexbennett/JustAFK.git</connection>
+        <developerConnection>scm:git:git://github.com/alexbennett/JustAFK.git</developerConnection>
         <tag>HEAD</tag>
-        <url>http://github.com/alexbennett/Minecraft-JustAFK</url>
+        <url>http://github.com/alexbennett/JustAFK</url>
     </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>censored-software</id>
-            <name>censored-software-releases</name>
-            <url>http://artifactory.censoredsoftware.com/artifactory/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>censored-software</id>
-            <name>censored-software-snapshots</name>
-            <url>http://artifactory.censoredsoftware.com/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <repositories>
         <repository>
