@@ -1,3 +1,6 @@
+#####This plugin is no longer supported by me. Feel free to check out forks that other developers have made or fork it yourself for updates.
+---
+
 **JustAFK** brings a simple - yet powerful - AFK (away from keyboard) plugin to Bukkit servers.
 
 ![JustAFK](http://alexben.net/projects/bukkit/JustAFK/justafk_logo.png)
